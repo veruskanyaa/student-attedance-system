@@ -108,11 +108,11 @@ Saves attendance log to database
 
 ##  Team
 
-Abdel Rahman, Yassin
-Berrame, Raven S.
-Inot, Veruska Tatiana S.
-Layos, Liam Jasper
-Solera, Denver I.
+**Abdel Rahman, Yassin**<br>
+**Berrame, Raven S.**<br>
+**Inot, Veruska Tatiana S.**<br>
+**Layos, Liam Jasper**<br>
+**Solera, Denver I.**<br>
 
 **Cebu Eastern College** — BS Information Technology Final Project
 
