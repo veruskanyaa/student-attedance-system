@@ -1,4 +1,4 @@
-# 📋 Student Attendance Logging System
+#  Student Attendance Logging System
 
 A web-based attendance tracking system built with **C# ASP.NET MVC** and **SQLite** for Cebu Eastern College.
 
@@ -6,7 +6,7 @@ Students check in using their School ID, and the system automatically determines
 
 ---
 
-## ✨ Features
+## Features
 
 - **Student Check-In** — Students enter their School ID; time is captured automatically
 - **On Time / Late Detection** — Compares check-in time against class schedules with configurable grace periods
@@ -31,7 +31,7 @@ Students check in using their School ID, and the system automatically determines
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 
@@ -56,7 +56,7 @@ Open `http://localhost:5000` in your browser.
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 AttendanceSystem/
@@ -76,7 +76,7 @@ AttendanceSystem/
 
 ---
 
-## 📖 Documentation
+##  Documentation
 
 | Document | Description |
 |---|---|
@@ -86,7 +86,7 @@ AttendanceSystem/
 
 ---
 
-## 📊 How It Works
+## How It Works
 
 ```
 Student enters School ID
@@ -106,7 +106,13 @@ Saves attendance log to database
 
 ---
 
-## 👥 Team
+##  Team
+
+Abdel Rahman, Yassin
+Berrame, Raven S.
+Inot, Veruska Tatiana S.
+Layos, Liam Jasper
+Solera, Denver I.
 
 **Cebu Eastern College** — BS Information Technology Final Project
 
