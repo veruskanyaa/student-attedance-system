@@ -112,4 +112,3 @@ Saves attendance log to database
 
 ---
 
-> Built with ❤️ using C# ASP.NET MVC + SQLite
