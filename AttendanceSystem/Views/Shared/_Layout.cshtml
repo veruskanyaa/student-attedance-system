@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Student Attendance System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="sidebar-title">Student Attendance</h2>
+                <p class="sidebar-subtitle">System</p>
+            </div>
+            <div class="sidebar-nav">
+                <a href="/Dashboard" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                    <i data-lucide="layout-dashboard" class="nav-icon"></i> Dashboard
+                </a>
+                <a href="/Students" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Students" ? "active" : "")">
+                    <i data-lucide="users" class="nav-icon"></i> Students
+                </a>
+                <a href="/Schedules" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Schedules" ? "active" : "")">
+                    <i data-lucide="calendar-clock" class="nav-icon"></i> Schedules
+                </a>
+                <a href="/History" class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "History" ? "active" : "")">
+                    <i data-lucide="clipboard-list" class="nav-icon"></i> History
+                </a>
+            </div>
+            <div class="sidebar-footer">
+                <div class="admin-info">
+                    <span class="admin-name">@User.FindFirst("DisplayName")?.Value</span>
+                    <span class="admin-role">Administrator</span>
+                </div>
+                <a href="/Account/Logout" class="logout-btn"><i data-lucide="log-out" style="width:14px;height:14px;"></i> Logout</a>
+            </div>
+        </nav>
+        <main class="main-content">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success"]</div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-error">@TempData["Error"]</div>
+            }
+            @RenderBody()
+        </main>
+    }
+    else
+    {
+        @RenderBody()
+    }
+    <script>lucide.createIcons();</script>
+</body>
+</html>

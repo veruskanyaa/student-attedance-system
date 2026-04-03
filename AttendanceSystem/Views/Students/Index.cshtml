@@ -1,0 +1,118 @@
+@model List<AttendanceSystem.Models.Student>
+@{
+    ViewData["Title"] = "Students";
+    var latestLogs = ViewBag.LatestLogs as Dictionary<int, dynamic> ?? new Dictionary<int, dynamic>();
+}
+
+<div class="page-header">
+    <div>
+        <h1>Students</h1>
+        <p class="page-subtitle">Manage registered students</p>
+    </div>
+    <button class="btn btn-primary" onclick="document.getElementById('addStudentModal').classList.add('show')">
+        + Add Student
+    </button>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <form method="get" class="search-form">
+            <input type="text" name="search" placeholder="Search students..." value="@ViewBag.Search" class="search-input" />
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </form>
+    </div>
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>School ID</th>
+                    <th>Grade</th>
+                    <th>Last Check-In</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var student in Model)
+                    {
+                        var hasLog = latestLogs.ContainsKey(student.Id);
+                        <tr>
+                            <td class="student-name">
+                                <div class="avatar">@student.FullName[0]</div>
+                                @student.FullName
+                            </td>
+                            <td>@student.SchoolId</td>
+                            <td>@student.Grade</td>
+                            <td>
+                                @if (hasLog)
+                                {
+                                    @(((DateTime)((dynamic)latestLogs[student.Id]).LastCheckIn).ToString("MMM dd, yyyy hh:mm tt"))
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Never</span>
+                                }
+                            </td>
+                            <td>
+                                @if (hasLog)
+                                {
+                                    var statusVal = (AttendanceSystem.Models.AttendanceStatus)((dynamic)latestLogs[student.Id]).LastStatus;
+                                    <span class="status-badge @(statusVal == AttendanceSystem.Models.AttendanceStatus.OnTime ? "on-time" : "late")">
+                                        @(statusVal == AttendanceSystem.Models.AttendanceStatus.OnTime ? "On Time" : "Late")
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                            <td>
+                                <form method="post" asp-action="Delete" asp-route-id="@student.Id"
+                                      onsubmit="return confirm('Delete @student.FullName?')">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="empty-state">No students found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Student Modal -->
+<div id="addStudentModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2>Add New Student</h2>
+            <button class="close-btn" onclick="document.getElementById('addStudentModal').classList.remove('show')">&times;</button>
+        </div>
+        <form method="post" asp-action="Create">
+            <div class="form-group">
+                <label for="SchoolId">School ID *</label>
+                <input type="text" id="SchoolId" name="SchoolId" placeholder="e.g. STU-2026-001" required />
+            </div>
+            <div class="form-group">
+                <label for="FullName">Full Name *</label>
+                <input type="text" id="FullName" name="FullName" placeholder="e.g. Juan Dela Cruz" required />
+            </div>
+            <div class="form-group">
+                <label for="Grade">Grade / Section</label>
+                <input type="text" id="Grade" name="Grade" placeholder="e.g. Grade 10" />
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('addStudentModal').classList.remove('show')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Add Student</button>
+            </div>
+        </form>
+    </div>
+</div>

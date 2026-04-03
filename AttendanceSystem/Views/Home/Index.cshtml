@@ -1,0 +1,103 @@
+@model AttendanceSystem.Models.ViewModels.CheckInViewModel
+@{
+    ViewData["Title"] = "Student Check-In";
+    Layout = "_Layout";
+    var result = ViewBag.Result as AttendanceSystem.Models.ViewModels.CheckInResultViewModel;
+}
+
+<div class="checkin-page">
+    <div class="checkin-container">
+        <div class="checkin-header">
+            <div class="checkin-icon"><i data-lucide="clipboard-check" style="width:48px;height:48px;color:var(--accent)"></i></div>
+            <h1>Student Attendance</h1>
+            <p>Check in to record your attendance</p>
+        </div>
+
+        <div class="checkin-card">
+            <h2>Submit Your Attendance</h2>
+
+            @if (result != null)
+            {
+                <div class="checkin-result @(result.Success ? "success" : "error")">
+                    @if (result.Success)
+                    {
+                        <div class="result-icon"><i data-lucide="circle-check" style="width:36px;height:36px;color:#059669"></i></div>
+                        <h3>Attendance Recorded!</h3>
+                        <div class="result-details">
+                            <p><strong>Name:</strong> @result.StudentName</p>
+                            <p><strong>School ID:</strong> @result.SchoolId</p>
+                            <p><strong>Subject:</strong> @result.SubjectName</p>
+                            <p><strong>Time:</strong> @result.CheckInTime.ToString("hh:mm tt")</p>
+                            <p><strong>Status:</strong>
+                                <span class="status-badge @(result.Status == "OnTime" ? "on-time" : "late")">
+                                    @(result.Status == "OnTime" ? "On Time" : "Late")
+                                </span>
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="result-icon"><i data-lucide="circle-x" style="width:36px;height:36px;color:#dc2626"></i></div>
+                        <p>@result.Message</p>
+                    }
+                </div>
+            }
+
+            <form method="post" asp-action="CheckIn" class="checkin-form">
+                <div class="form-group">
+                    <label for="SchoolId">School ID *</label>
+                    <input type="text"
+                           id="SchoolId"
+                           name="SchoolId"
+                           placeholder="Enter your school ID"
+                           required
+                           autocomplete="off" />
+                </div>
+
+                <div class="current-time-display">
+                    <span class="time-label">Current Time:</span>
+                    <span class="time-value" id="currentTime"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i data-lucide="log-in" style="width:18px;height:18px;"></i> Check In
+                </button>
+            </form>
+
+            <div class="checkin-instructions">
+                <h4>Instructions:</h4>
+                <ul>
+                    <li>Enter your school ID exactly as it appears in school records</li>
+                    <li>Your attendance time is recorded automatically</li>
+                    <li>The system will determine if you are on time or late based on the class schedule</li>
+                    <li>You can only check in once per day</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="checkin-footer">
+            <a href="/Account/Login" class="admin-link">Admin Login <i data-lucide="arrow-right" style="width:14px;height:14px;vertical-align:middle"></i></a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+        const dateStr = now.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        document.getElementById('currentTime').textContent = dateStr + ' — ' + timeStr;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+</script>

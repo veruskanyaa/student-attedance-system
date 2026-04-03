@@ -1,0 +1,90 @@
+@model AttendanceSystem.Models.ViewModels.HistoryViewModel
+@{
+    ViewData["Title"] = "History";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Attendance History</h1>
+        <p class="page-subtitle">View and export attendance records</p>
+    </div>
+    <a href="/History/Export" class="btn btn-secondary"><i data-lucide="download" style="width:16px;height:16px;"></i> Export CSV</a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <label>Filter by:</label>
+                <a href="/History" class="filter-btn @(string.IsNullOrEmpty(Model.FilterStatus) || Model.FilterStatus == "All" ? "active" : "")">All</a>
+                <a href="/History?status=OnTime&date=@Model.FilterDate" class="filter-btn @(Model.FilterStatus == "OnTime" ? "active" : "")">On Time</a>
+                <a href="/History?status=Late&date=@Model.FilterDate" class="filter-btn @(Model.FilterStatus == "Late" ? "active" : "")">Late</a>
+            </div>
+            <div class="filter-group">
+                <input type="date" name="date" value="@Model.FilterDate" onchange="this.form.submit()" class="date-filter" />
+                <input type="hidden" name="status" value="@Model.FilterStatus" />
+            </div>
+        </form>
+    </div>
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>School ID</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Logs.Any())
+                {
+                    @foreach (var log in Model.Logs)
+                    {
+                        <tr>
+                            <td class="student-name">
+                                <div class="avatar">@(log.Student?.FullName[0] ?? '?')</div>
+                                @(log.Student?.FullName ?? "Unknown")
+                            </td>
+                            <td>@(log.Student?.SchoolId ?? "—")</td>
+                            <td>@(log.Schedule?.SubjectName ?? "General")</td>
+                            <td>
+                                <span class="status-badge @(log.Status == AttendanceSystem.Models.AttendanceStatus.OnTime ? "on-time" : "late")">
+                                    @(log.Status == AttendanceSystem.Models.AttendanceStatus.OnTime ? "On Time" : "Late")
+                                </span>
+                            </td>
+                            <td>@log.Date.ToString("MMM dd, yyyy")</td>
+                            <td>@log.CheckInTime.ToString("hh:mm tt")</td>
+                            <td class="text-muted">@(log.Notes ?? "—")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="empty-state">No attendance records found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <div class="stats-row">
+            <div class="stat-pill">
+                <span class="stat-pill-label">Total Entries</span>
+                <span class="stat-pill-value">@Model.TotalEntries</span>
+            </div>
+            <div class="stat-pill on-time">
+                <span class="stat-pill-label">On Time</span>
+                <span class="stat-pill-value">@Model.OnTimeCount</span>
+            </div>
+            <div class="stat-pill late">
+                <span class="stat-pill-label">Late</span>
+                <span class="stat-pill-value">@Model.LateCount</span>
+            </div>
+        </div>
+    </div>
+</div>

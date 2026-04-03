@@ -1,0 +1,69 @@
+@model AttendanceSystem.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-header">
+    <h1>Dashboard Overview</h1>
+    <p class="page-subtitle">Today's attendance summary</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-info">
+            <span class="stat-label">Total Students</span>
+            <span class="stat-value">@Model.TotalStudents</span>
+        </div>
+        <div class="stat-icon blue"><i data-lucide="users"></i></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-info">
+            <span class="stat-label">Checked In Today</span>
+            <span class="stat-value">@Model.CheckedInToday</span>
+        </div>
+        <div class="stat-icon green"><i data-lucide="user-check"></i></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-info">
+            <span class="stat-label">On Time</span>
+            <span class="stat-value">@Model.OnTimeToday</span>
+        </div>
+        <div class="stat-icon teal"><i data-lucide="clock"></i></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-info">
+            <span class="stat-label">Late</span>
+            <span class="stat-value">@Model.LateToday</span>
+        </div>
+        <div class="stat-icon orange"><i data-lucide="alert-triangle"></i></div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>Recent Activity</h2>
+        <span class="badge">This Week: @Model.TotalLogsThisWeek logs</span>
+    </div>
+    <div class="card-body">
+        @if (Model.RecentActivity.Any())
+        {
+            <div class="activity-list">
+                @foreach (var item in Model.RecentActivity)
+                {
+                    <div class="activity-item">
+                        <div class="activity-dot @(item.Status == "On Time" ? "on-time" : "late")"></div>
+                        <div class="activity-info">
+                            <span class="activity-name">@item.StudentName</span>
+                            <span class="activity-status">@item.Status</span>
+                        </div>
+                        <span class="activity-time">@item.TimeAgo</span>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="empty-state">No check-ins recorded today.</p>
+        }
+    </div>
+</div>

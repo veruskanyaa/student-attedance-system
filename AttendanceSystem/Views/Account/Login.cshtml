@@ -1,0 +1,50 @@
+@model AttendanceSystem.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Admin Login";
+    Layout = "_Layout";
+}
+
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-icon"><i data-lucide="lock-keyhole" style="width:40px;height:40px;color:var(--accent)"></i></div>
+        <h1>Welcome Back</h1>
+        <p class="login-subtitle">Sign in to your account to continue</p>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-error">@ViewBag.Error</div>
+        }
+
+        <form method="post" asp-action="Login" class="login-form">
+            <div class="form-group">
+                <label for="Username">Username</label>
+                <input type="text"
+                       id="Username"
+                       name="Username"
+                       placeholder="Enter username"
+                       required
+                       autocomplete="off" />
+            </div>
+
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <input type="password"
+                       id="Password"
+                       name="Password"
+                       placeholder="Enter password"
+                       required />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+        </form>
+
+        <div class="login-footer">
+            <p class="demo-creds">
+                <strong>Default Credentials:</strong><br>
+                Username: admin &nbsp;|&nbsp; Password: admin123
+            </p>
+            <a href="/" class="back-link"><i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:middle"></i> Back to Student Check-In</a>
+        </div>
+    <script>lucide.createIcons();</script>
+    </div>
+</div>

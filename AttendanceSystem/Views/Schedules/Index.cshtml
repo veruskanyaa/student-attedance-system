@@ -1,0 +1,105 @@
+@model List<AttendanceSystem.Models.ClassSchedule>
+@{
+    ViewData["Title"] = "Class Schedules";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Class Schedules</h1>
+        <p class="page-subtitle">Define class times for attendance tracking</p>
+    </div>
+    <button class="btn btn-primary" onclick="document.getElementById('addScheduleModal').classList.add('show')">
+        + Add Schedule
+    </button>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Day</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Grace Period</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var schedule in Model)
+                    {
+                        <tr>
+                            <td class="subject-name">@schedule.SubjectName</td>
+                            <td>@schedule.DayOfWeek</td>
+                            <td>@DateTime.Today.Add(schedule.StartTime).ToString("hh:mm tt")</td>
+                            <td>@DateTime.Today.Add(schedule.EndTime).ToString("hh:mm tt")</td>
+                            <td>@schedule.GracePeriodMinutes min</td>
+                            <td>
+                                <form method="post" asp-action="Delete" asp-route-id="@schedule.Id"
+                                      onsubmit="return confirm('Delete this schedule?')">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="empty-state">No schedules defined yet. Add one to start tracking attendance.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Schedule Modal -->
+<div id="addScheduleModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2>Add Class Schedule</h2>
+            <button class="close-btn" onclick="document.getElementById('addScheduleModal').classList.remove('show')">&times;</button>
+        </div>
+        <form method="post" asp-action="Create">
+            <div class="form-group">
+                <label for="SubjectName">Subject Name *</label>
+                <input type="text" id="SubjectName" name="SubjectName" placeholder="e.g. Mathematics" required />
+            </div>
+            <div class="form-group">
+                <label for="DayOfWeek">Day of Week *</label>
+                <select id="DayOfWeek" name="DayOfWeek" required>
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                    <option value="3">Wednesday</option>
+                    <option value="4">Thursday</option>
+                    <option value="5">Friday</option>
+                    <option value="6">Saturday</option>
+                    <option value="0">Sunday</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="StartTime">Start Time *</label>
+                    <input type="time" id="StartTime" name="StartTime" required />
+                </div>
+                <div class="form-group">
+                    <label for="EndTime">End Time *</label>
+                    <input type="time" id="EndTime" name="EndTime" required />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="GracePeriodMinutes">Grace Period (minutes)</label>
+                <input type="number" id="GracePeriodMinutes" name="GracePeriodMinutes" value="15" min="0" max="60" />
+                <small class="form-hint">Students checking in within this time after class starts are still marked "On Time"</small>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('addScheduleModal').classList.remove('show')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Add Schedule</button>
+            </div>
+        </form>
+    </div>
+</div>
